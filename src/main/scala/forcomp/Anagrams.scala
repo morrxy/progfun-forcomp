@@ -34,14 +34,20 @@ object Anagrams {
    *  same character, and are represented as a lowercase character in the occurrence list.
    */
 //  def wordOccurrences(w: Word): Occurrences = ???
-  def wordOccurrences(w: Word) = {
+  def wordOccurrences(w: Word): Occurrences = {
     val w1 = w.toLowerCase.toList
     val w2 = w1.groupBy(ch => ch).toList
-    w2
+    val w3 = w2.sortWith((x, y) => x._1 > y._1).reverse
+    val w4 = w3 map (x => (x._1, x._2.length))
+    w4
   }
 
   /** Converts a sentence into its character occurrence list. */
-  def sentenceOccurrences(s: Sentence): Occurrences = ???
+//  def sentenceOccurrences(s: Sentence): Occurrences = ???
+  def sentenceOccurrences(s: Sentence): Occurrences = {
+    val s1 = s reduce (_ + _)
+    wordOccurrences(s1)
+  }
 
   /** The `dictionaryByOccurrences` is a `Map` from different occurrences to a sequence of all
    *  the words that have that occurrence count.
@@ -58,10 +64,17 @@ object Anagrams {
    *    List(('a', 1), ('e', 1), ('t', 1)) -> Seq("ate", "eat", "tea")
    *
    */
-  lazy val dictionaryByOccurrences: Map[Occurrences, List[Word]] = ???
+//  lazy val dictionaryByOccurrences: Map[Occurrences, List[Word]] = ???
+  lazy val dictionaryByOccurrences = dictionary groupBy (w => wordOccurrences(w))
 
   /** Returns all the anagrams of a given word. */
-  def wordAnagrams(word: Word): List[Word] = ???
+  def wordAnagrams(word: Word): List[Word] = {
+    val opt = dictionaryByOccurrences get wordOccurrences(word)
+    opt match {
+      case None => List()
+      case Some(wordlist) => wordlist
+    }
+  }
 
   /** Returns the list of all subsets of the occurrence list.
    *  This includes the occurrence itself, i.e. `List(('k', 1), ('o', 1))`
@@ -85,6 +98,7 @@ object Anagrams {
    *  Note that the order of the occurrence list subsets does not matter -- the subsets
    *  in the example above could have been displayed in some other order.
    */
+//  def combinations(occurrences: Occurrences): List[Occurrences] = ???
   def combinations(occurrences: Occurrences): List[Occurrences] = ???
 
   /** Subtracts occurrence list `y` from occurrence list `x`.
